@@ -4,7 +4,7 @@ import { Product } from '../models/product.js';
 // import * as productServices from '../services/productService.js';
 
 export const getAllProducts = async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find({ userId: req.user._id });
 
   //   2
   //   const products = await productServices.getAllProducts();
@@ -13,7 +13,10 @@ export const getAllProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
   const { productId } = req.params;
-  const product = await Product.findById(productId);
+  const product = await Product.findOne({
+    _id: productId,
+    userId: req.user._id,
+  });
 
   //   2
   // const products = await productServices.getProductById(productId);
@@ -25,7 +28,7 @@ export const getProductById = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const product = await Product.create(req.body);
+  const product = await Product.create({ ...req.body, userId: req.user._id });
 
   //   2
   //  const product = await productServices.createProduct(req.body);
@@ -39,9 +42,13 @@ export const updateProduct = async (req, res) => {
   //   const product = await Product.findOneAndUpdate({ _id: productId }, req.body, {
   //     returnDocument: 'after',
   //   });
-  const product = await Product.findByIdAndUpdate(productId, req.body, {
-    returnDocument: 'after',
-  });
+  const product = await Product.findOneAndUpdate(
+    { _id: productId, userId: req.user._id },
+    req.body,
+    {
+      returnDocument: 'after',
+    },
+  );
 
   //   2
   //  const product = await productServices.updateProduct(productId, req.body)
@@ -55,7 +62,10 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   const { productId } = req.params;
 
-  const product = await Product.findByIdAndDelete(productId);
+  const product = await Product.findOneAndDelete({
+    _id: productId,
+    userId: req.user._id,
+  });
 
   //   2
   // const product = await productServices.deleteProduct(productId);
