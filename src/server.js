@@ -8,6 +8,7 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { logger } from './middleware/logger.js';
 import authRouter from './routes/authRoutes.js';
 import productsRouter from './routes/productsRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import { errors } from 'celebrate';
 import cookieParser from 'cookie-parser';
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 app.use(authRouter);
 app.use(productsRouter);
+app.use(userRoutes);
 
 app.use(notFoundHandler);
 app.use(errors());
